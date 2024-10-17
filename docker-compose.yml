@@ -1,6 +1,24 @@
-version: '3.0'
+version: '3.5'
 
 services:
+  nats:
+    container_name: nats
+    image: nats:latest
+    restart: always
+    environment:
+      - S=S
+    healthcheck:
+      test: [ "CMD-SHELL", "telnet", "localhost", "4222" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    ports:
+      - 4222:4222 # client
+      - 8222:8222 # cluster
+      - 6222:6222 # monitoring 
+
+
+
   postgres:
     container_name: postgres
     image: postgres:latest
