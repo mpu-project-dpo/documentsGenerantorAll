@@ -3,7 +3,7 @@ FROM golang:1.23-alpine AS builder
 ENV CGO_ENABLED=0 \
     GOOS=linux \
     GO111MODULE=on \
-    GOARCH=amd64 \
+    GOARCH=amd64
 
 RUN apk add --no-cache git
 
