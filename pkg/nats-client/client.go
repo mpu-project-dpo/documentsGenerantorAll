@@ -2,13 +2,22 @@ package nats_client
 
 import "github.com/nats-io/nats.go"
 
-func (c *Config) New() *nats.Conn {
+func (c *Config) New() *Client {
 	nc, err := nats.Connect(c.Url)
 	if err != nil {
 		panic(err)
 	}
 
-	defer nc.Drain()
+	defer func(nc *nats.Conn) {
+		err = nc.Drain()
+		if err != nil {
+			panic(err)
+		}
+	}(nc)
 
-	return nc
+	return &Client{nc, c.Topic}
+}
+
+func (c *Client) Publish(data []byte) error {
+	return c.conn.Publish(c.t, data)
 }

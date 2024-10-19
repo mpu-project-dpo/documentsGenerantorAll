@@ -1,19 +1,20 @@
 package http
 
 import (
+	"dpo-document-api/internal/business/models"
+	"encoding/json"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
-	id := r.PathValue("id")
-	if id == "" {
-		zap.L().Error("file id is empty")
+	doc := new(models.Document)
+
+	if err := json.NewDecoder(r.Body).Decode(doc); err != nil {
 		return
 	}
 
-	err := h.DpoDocumentService.ProcessDocument(doc)
-	if err != nil {
+	if err := h.DpoDocumentService.ProcessDocument(doc); err != nil {
 		zap.L().Sugar().Errorf("Internal error %s", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return

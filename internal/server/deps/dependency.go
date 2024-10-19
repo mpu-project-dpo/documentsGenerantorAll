@@ -8,6 +8,6 @@ func Process(config *config.ServiceConfig) *Providers {
 	return &Providers{
 		ServerHttp: config.Http,
 		Logger:     config.Logger.InitializeGlobally(),
-		NatsClient: config.NatsClient.New(),
+		NatsClient: config.Nats.New(),
 	}
 }

@@ -11,15 +11,6 @@ import (
 	"syscall"
 )
 
-func WithRoutes(handlers ...http.Handler) http.Handler {
-	mux := http.NewServeMux()
-	for _, h := range handlers {
-		mux.Handle("/", h)
-	}
-
-	return mux
-}
-
 func New(config *Config, router http.Handler, withoutCORS bool) func() error {
 	if !withoutCORS {
 		router = initializedCors.Handler(router)

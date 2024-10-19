@@ -1,15 +1,17 @@
 package service
 
-import "github.com/nats-io/nats.go"
+import (
+	nats "dpo-document-api/pkg/nats-client"
+)
 
 type Service struct {
-	NatsClient *nats.Conn
+	Nats *nats.Client
 }
 
 func New(
-	natsClient *nats.Conn,
+	nats *nats.Client,
 ) *Service {
 	return &Service{
-		NatsClient: natsClient,
+		Nats: nats,
 	}
 }

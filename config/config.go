@@ -7,7 +7,7 @@ import (
 )
 
 type ServiceConfig struct {
-	Http       *httpTransport.Config
-	Logger     *logger.Config
-	NatsClient *natsClient.Config
+	Http   *httpTransport.Config
+	Logger *logger.Config
+	Nats   *natsClient.Config
 }

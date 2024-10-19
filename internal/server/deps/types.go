@@ -2,12 +2,12 @@ package deps
 
 import (
 	httpTransport "dpo-document-api/pkg/app-kit/http-transport"
-	"github.com/nats-io/nats.go"
+	natsClient "dpo-document-api/pkg/nats-client"
 	"go.uber.org/zap"
 )
 
 type Providers struct {
 	ServerHttp *httpTransport.Config
 	Logger     *zap.Logger
-	NatsClient *nats.Conn
+	NatsClient *natsClient.Client
 }
