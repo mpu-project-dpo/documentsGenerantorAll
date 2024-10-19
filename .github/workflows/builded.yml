@@ -1,4 +1,5 @@
-name: builded 
+---
+name: builded
 
 on:
   schedule:
