@@ -1,9 +1,9 @@
-package nats_client
+package natsClient
 
 import "github.com/nats-io/nats.go"
 
 type Config struct {
-	Url   string
+	URL   string
 	Topic string
 }
 

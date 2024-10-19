@@ -1,14 +1,12 @@
 package server
 
 import (
-	"net/http"
-
 	brokerApiService "dpo-document-api/internal/business/service"
 	brokerApiTransport "dpo-document-api/internal/business/transport/http"
-
 	"dpo-document-api/internal/server/deps"
 	httpTransport "dpo-document-api/pkg/app-kit/http-transport"
 	appKit "dpo-document-api/pkg/app-kit/server"
+	"net/http"
 )
 
 func GetController(deps *deps.Providers) appKit.IController {

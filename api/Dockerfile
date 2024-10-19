@@ -9,7 +9,7 @@ RUN apk add --no-cache git
 
 WORKDIR /build
 
-COPY . .
+COPY .. .
 
 RUN go mod download
 

@@ -1,9 +1,9 @@
-package nats_client
+package natsClient
 
 import "github.com/nats-io/nats.go"
 
 func (c *Config) New() *Client {
-	nc, err := nats.Connect(c.Url)
+	nc, err := nats.Connect(c.URL)
 	if err != nil {
 		panic(err)
 	}
