@@ -6,7 +6,7 @@ import (
 
 func Process(config *config.ServiceConfig) *Providers {
 	return &Providers{
-		ServerHttp: config.Http,
+		ServerHTTP: config.HTTP,
 		Logger:     config.Logger.InitializeGlobally(),
 		NatsClient: config.Nats.New(),
 	}

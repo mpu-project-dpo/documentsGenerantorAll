@@ -13,7 +13,6 @@ type Dependency interface {
 }
 
 type Controller struct {
-	transport Transport
 }
 
 type Transport interface {

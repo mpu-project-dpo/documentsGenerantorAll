@@ -20,7 +20,7 @@ func GetController(deps *deps.Providers) appKit.IController {
 	mux.Handle("POST /api/v1/document/process{", http.HandlerFunc(service.ProcessDocument))
 
 	return httpTransport.New(
-		deps.ServerHttp,
+		deps.ServerHTTP,
 		mux,
 		false,
 	)

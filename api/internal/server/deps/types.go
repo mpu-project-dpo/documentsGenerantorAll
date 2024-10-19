@@ -7,7 +7,7 @@ import (
 )
 
 type Providers struct {
-	ServerHttp *httpTransport.Config
+	ServerHTTP *httpTransport.Config
 	Logger     *zap.Logger
 	NatsClient *natsClient.Client
 }
