@@ -41,9 +41,9 @@ services:
         condition: service_healthy
 
   generator:
-    container_name: generator
+    container_name: processor
     environment:
-      - generator_HOST=generator
+      - generator_HOST=processor
     build:
       context: ./aggregator-go
     ports:
