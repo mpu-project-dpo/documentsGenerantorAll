@@ -7,3 +7,9 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 npm i
 
 npm run dev
+
+envs:
+
+VITE_API_BASE_URL=string
+
+VITE_SEND_FORM_PATH=string

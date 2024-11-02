@@ -11,6 +11,8 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@ssibrahimbas/v-mask": "^1.0.0",
+    "axios": "^1.7.7",
     "pinia": "^2.2.5",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"

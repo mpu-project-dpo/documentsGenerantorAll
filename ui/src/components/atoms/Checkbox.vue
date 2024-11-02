@@ -10,6 +10,7 @@
       :class="{
         'bg-secondary': modelValue && props.activeColor === 'secondary',
         'bg-surface-secondary': (!modelValue) || modelValue && props.activeColor === 'primary',
+        'border-2 border-surface-tertiary': bordered,
       } "
     >
       <svg v-if="modelValue" width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -29,6 +30,7 @@
 interface Props {
   label?: string
   activeColor?: 'primary' | 'secondary'
+  bordered?: boolean
 }
 const props = withDefaults(defineProps<Props>(), { activeColor: 'primary' })
 const modelValue = defineModel<boolean>({ required: true })

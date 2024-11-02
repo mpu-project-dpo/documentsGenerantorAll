@@ -1,29 +1,44 @@
 <template>
   <div class="text-[14px]">
-    <div class="checkbox" @click.stop.prevent>
-      <Checkbox v-model="test1" label="Данные об образовании" />
+    <div class="checkbox" @click.stop.prevent="$router.push('/')">
+      <Checkbox v-model="education" label="Данные об образовании" :bordered="$route.name === 'education'" />
     </div>
-    <div class="checkbox" @click.stop.prevent>
-      <Checkbox v-model="test2" label="Контактные данные" />
+    <div class="checkbox" @click.stop.prevent="$router.push('/contacts')">
+      <Checkbox v-model="contacts" label="Контактные данные" :bordered="$route.name === 'contacts'" />
     </div>
-    <div class="checkbox" @click.stop.prevent>
-      <Checkbox v-model="test3" label="Личные документы" />
+    <div
+      class="checkbox"
+
+      @click.stop.prevent="$router.push('/docs')"
+    >
+      <Checkbox v-model="docs" label="Личные документы" :bordered="$route.name === 'docs'">
+        />
+      </checkbox>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Checkbox from '@/components/atoms/Checkbox.vue'
-import { ref } from 'vue'
+import { useFormStore } from '@/store/formStore.ts'
+import { ref, watch } from 'vue'
 
-interface Props {
-  items: Array<any>
-}
-const props = defineProps<Props>()
+const store = useFormStore()
 
-const test1 = ref(false)
-const test2 = ref(false)
-const test3 = ref(false)
+const education = ref(false)
+const contacts = ref(false)
+const docs = ref(false)
+
+watch(store.education, () => {
+  education.value = !store.checkFields(store.education)
+  console.log(store.education)
+})
+watch(store.contacts, () => {
+  contacts.value = !store.checkFields(store.contacts)
+})
+watch(store.docs, () => {
+  docs.value = !store.checkFields(store.docs)
+})
 </script>
 
 <style scoped>
