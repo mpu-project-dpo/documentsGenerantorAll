@@ -1,10 +1,12 @@
 <template>
   <div class="flex flex-col justify-between">
     <div>
-      <img src="/title.svg" alt="title" class="mb-8">
+      <div>
+        <img src="/title.svg" alt="title" class="mb-8 w-full">
+      </div>
       <Stepper />
     </div>
-    <Button class="text-text-alert font-bold flex no-wrap">
+    <Button class="text-text-alert font-bold no-wrap sm:flex hidden">
       <template #prepend>
         <img src="/face.svg" alt="face icon" class="mr-2">
       </template>

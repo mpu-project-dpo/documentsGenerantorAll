@@ -31,6 +31,7 @@ interface Props {
   label?: string
   activeColor?: 'primary' | 'secondary'
   bordered?: boolean
+  disabled?: boolean
 }
 const props = withDefaults(defineProps<Props>(), { activeColor: 'primary' })
 const modelValue = defineModel<boolean>({ required: true })

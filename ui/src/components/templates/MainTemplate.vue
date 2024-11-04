@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-surface-dark flex rounded-xl overflow-hidden">
+  <div class="bg-surface-dark flex flex-nowrap rounded-xl overflow-hidden flex-col sm:flex-row">
     <Aside class="p-5" />
     <div class="bg-surface-primary p-5">
       <div class="text-xl font-bold mb-5">
@@ -26,8 +26,12 @@
               <Back class="w-5 h-5 mr-3.5" />
             </Button>
           </div>
-          <Button class="rounded-lg w-full p-2.5 bg-secondary-disabled" @click="onContinue">
-            Далее
+          <Button
+            class="rounded-lg w-full p-2.5 bg-secondary-enabled disabled:bg-secondary-disabled"
+            :disabled="isButtonDisabled"
+            @click="onContinue"
+          >
+            {{ route.name === 'docs' ? 'Отправить документы' : 'Далее' }}
           </Button>
         </div>
         <Button v-if="route.name === 'education'" class="rounded-lg w-full bg-surface-tertiary p-2.5">
@@ -43,7 +47,7 @@ import Back from '@/assets/icons/back.vue'
 import Button from '@/components/atoms/Button.vue'
 import Checkbox from '@/components/atoms/Checkbox.vue'
 import { useFormStore } from '@/store/formStore.ts'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Aside from '../organisms/Aside.vue'
 
@@ -52,6 +56,14 @@ const route = useRoute()
 const store = useFormStore()
 
 const checkbox = ref(false)
+
+const isButtonDisabled = computed(() => {
+  const routeName = route.name as string
+  if (Object.keys(store).includes(routeName)) {
+    return store.findEmptyField(store[routeName as 'education' || 'docs' || 'contacts'])
+  }
+  return false
+})
 
 function onContinue() {
   if (route.name === 'education') {

@@ -28,7 +28,9 @@ export const useFormStore = defineStore('form', () => {
     snils: { field: 'Снилс', value: '', mask: '###-###-### ##' },
   })
 
-  const checkFields = (obj: Record<string, { field: string, value: string }>) => {
+  const findEmptyField = (obj: Record<string, { field: string, value: string }>) => {
+    if (!obj)
+      return
     return !!Object.values(obj).find(item => !item.value)
   }
 
@@ -48,7 +50,7 @@ export const useFormStore = defineStore('form', () => {
     education,
     contacts,
     docs,
-    checkFields,
+    findEmptyField,
     sendForm,
   }
 })

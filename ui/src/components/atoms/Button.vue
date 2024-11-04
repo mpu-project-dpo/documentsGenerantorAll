@@ -1,5 +1,8 @@
 <template>
-  <button class="flex flex-nowrap items-center">
+  <button
+    class="flex flex-nowrap items-center"
+    :disabled="props.disabled"
+  >
     <div v-if="$slots.prepend">
       <slot name="prepend" />
     </div>
@@ -13,7 +16,12 @@
 </template>
 
 <script setup lang="ts">
+interface Props {
+  disabledClass?: string
+  disabled?: boolean
+}
 
+const props = defineProps<Props>()
 </script>
 
 <style scoped>

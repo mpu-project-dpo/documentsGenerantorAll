@@ -7,7 +7,9 @@
   --primary-color: #FFF;
 
   --secondary-color: #5F6DEC;
+
   --secondary-disabled-color: #718AAD;
+  --secondary-enabled-color: #90B3E7;
 
   --placeholder-color: #6F6E6F;
 
@@ -30,4 +32,5 @@
 
 body, #app {
   height: 100dvh;
+  @apply p-2
 }
