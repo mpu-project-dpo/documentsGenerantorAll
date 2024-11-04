@@ -11,10 +11,14 @@
       <router-view />
 
       <div class="flex my-5 text-[13px] items-center">
-        <Checkbox v-model="checkbox" active-color="secondary">
+        <Checkbox v-model="store.confPolicy" active-color="secondary">
           <template #label>
             <div>
-              Согласен с <a class="text-secondary inline" @click.stop.prevent>политикой конфиденциальности</a>
+              Согласен с <a
+                class="text-secondary inline"
+                :href="confPolicyLink"
+                target="_blank"
+              >политикой конфиденциальности</a>
             </div>
           </template>
         </Checkbox>
@@ -28,7 +32,7 @@
           </div>
           <Button
             class="rounded-lg w-full p-2.5 bg-secondary-enabled disabled:bg-secondary-disabled"
-            :disabled="isButtonDisabled"
+            :disabled="isButtonDisabled || (route.name === 'docs' && !store.confPolicy)"
             @click="onContinue"
           >
             {{ route.name === 'docs' ? 'Отправить документы' : 'Далее' }}
@@ -47,15 +51,15 @@ import Back from '@/assets/icons/back.vue'
 import Button from '@/components/atoms/Button.vue'
 import Checkbox from '@/components/atoms/Checkbox.vue'
 import { useFormStore } from '@/store/formStore.ts'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Aside from '../organisms/Aside.vue'
+
+const confPolicyLink = import.meta.env.VITE_CONF_POLICY_LINK
 
 const router = useRouter()
 const route = useRoute()
 const store = useFormStore()
-
-const checkbox = ref(false)
 
 const isButtonDisabled = computed(() => {
   const routeName = route.name as string

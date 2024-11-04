@@ -42,7 +42,7 @@
         <div class="text-placeholder-color font-bold mr-2">
           {{ $route.meta.pageNumber }}/3
         </div>
-        <Dropdown />
+        <Dropdown :class="{ 'rotate-180': !isDropdownOpened }" />
       </div>
     </div>
   </div>

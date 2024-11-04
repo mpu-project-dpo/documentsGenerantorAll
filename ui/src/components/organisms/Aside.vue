@@ -2,7 +2,7 @@
   <div class="flex flex-col justify-between">
     <div>
       <div>
-        <img src="/title.svg" alt="title" class="mb-8 w-full">
+        <img src="/title.svg" alt="title" class="mb-8">
       </div>
       <Stepper />
     </div>
