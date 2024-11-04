@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import Input from '@/components/atoms/Input.vue'
 import { onClickOutside } from '@vueuse/core'
-import { computed, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 interface Props {
   label?: string
@@ -72,6 +72,9 @@ function onClose() {
 }
 
 onClickOutside(target, onClose)
+
+onUnmounted(() => onClose)
+onMounted(() => searchModel.value = modelValue.value)
 </script>
 
 <style scoped>
