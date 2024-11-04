@@ -10,6 +10,10 @@ npm run dev
 
 envs:
 
-VITE_API_BASE_URL=string
+VITE_API_BASE_URL=string - базовый урл апи
 
-VITE_SEND_FORM_PATH=string
+VITE_SEND_FORM_PATH=string - путь к ресту, отправляющему форму на бек
+
+VITE_GET_DPO_PATH=string - путь к ресту, возвращающему список ДПО
+
+VITE_CONF_POLICY_LINK=string - ссылка на политику конфиденциальности
