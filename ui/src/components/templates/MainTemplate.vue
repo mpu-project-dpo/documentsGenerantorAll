@@ -1,7 +1,18 @@
 <template>
-  <div class="bg-surface-dark flex flex-nowrap rounded-xl overflow-hidden flex-col sm:flex-row">
+  <div class="bg-surface-dark flex flex-nowrap rounded-xl flex-col sm:flex-row">
     <Aside class="p-5" />
-    <div class="bg-surface-primary p-5">
+    <div
+      class="
+      bg-surface-primary p-5
+
+      sm:rounded-br-xl
+      sm:rounded-tr-xl
+      sm:rounded-bl-none
+
+      rounded-bl-xl
+      rounded-br-xl
+      rounded-tr-none"
+    >
       <div class="text-xl font-bold mb-5">
         <span v-if="$route.name === 'education'">Данные об образовании</span>
         <span v-else-if="$route.name === 'contacts'">Контактные данные</span>

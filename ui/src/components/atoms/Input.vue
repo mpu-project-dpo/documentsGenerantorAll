@@ -26,6 +26,7 @@
         type="text"
         class="bg-transparent min-h-6 text-white outline-none placeholder:text-placeholder-color placeholder:font-thin grow"
         :placeholder="props.placeholder"
+        @focus="emits('focus')"
       >
       <input
         v-else
@@ -34,6 +35,7 @@
         type="text"
         class="bg-transparent min-h-6 text-white outline-none placeholder:text-placeholder-color placeholder:font-thin grow"
         :placeholder="props.placeholder"
+        @focus="emits('focus')"
       >
       <div class="ml-1"><slot name="append" /></div>
       <div v-if="props.clearable && modelValue" class="w-6 h-6 ml-1">
@@ -57,7 +59,13 @@ interface Props {
   mask?: string
 }
 
+interface Emits {
+  (name: 'focus'): void
+}
+
 const props = defineProps<Props>()
+const emits = defineEmits<Emits>()
+
 const inputRef = ref<HTMLInputElement | null>(null)
 const modelValue = defineModel<string>({ required: true })
 </script>
