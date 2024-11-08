@@ -1,7 +1,23 @@
 ---
-version: '3.0'
+version: '3.5'
 
 services:
+  nats:
+    container_name: nats
+    image: nats:latest
+    restart: always
+    environment:
+      - S=S
+    healthcheck:
+      test: [ "CMD-SHELL", "telnet", "localhost", "4222" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    ports:
+      - 4222:4222 # client
+      - 8222:8222 # cluster
+      - 6222:6222 # monitoring
+
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -16,41 +32,30 @@ services:
       - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
       - pgdata:/var/lib/postgresql/data
-  backend:
-    container_name: backend
+  api:
+    container_name: api
     environment:
       - POSTGRESQL_USER=${POSTGRESQL_USER}
     build:
-      context: ./backend
+      context: ./api
     ports:
-      - ${API_HOST_PORT}:${API_PORT}
+      - 8000:8000
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-  logger:
-    container_name: logger
-    environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
-    build:
-      context: ./logger
-    depends_on:
-      rabbitmq:
+      nats:
         condition: service_healthy
       postgres:
         condition: service_healthy
 
-  generator:
+  processor:
     container_name: processor
     environment:
       - generator_HOST=processor
     build:
-      context: ./aggregator-go
+      context: ./processor
     ports:
-      - ${AGGREGATOR_HOST_PORT}:${AGGREGATOR_PORT}
+      - 8001:8001
     depends_on:
-      rabbitmq:
+      nats:
         condition: service_healthy
       postgres:
         condition: service_healthy

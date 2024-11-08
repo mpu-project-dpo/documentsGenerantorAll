@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"app-kit/server"
-	"dpo-document-api/config"
-	controller "dpo-document-api/internal/server"
-	"dpo-document-api/internal/server/deps"
+	"dpo-document-processor/config"
+	controller "dpo-document-processor/internal/server"
+	"dpo-document-processor/internal/server/deps"
 )
 
 func Run() {

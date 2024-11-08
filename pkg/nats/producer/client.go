@@ -1,4 +1,4 @@
-package natsClient
+package producer
 
 import "github.com/nats-io/nats.go"
 
