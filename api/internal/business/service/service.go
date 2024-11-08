@@ -1,7 +1,7 @@
 package service
 
 import (
-	nats "nats/producer"
+	nats "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/producer"
 )
 
 type Service struct {

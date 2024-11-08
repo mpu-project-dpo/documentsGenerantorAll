@@ -3,16 +3,16 @@ module dpo-document-api
 go 1.23.1
 
 replace (
-	app-kit => ./../pkg/app-kit
-	nats => ./../pkg/nats
-	nats-contracts => ./../pkg/nats-contracts
+	github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit => ./../pkg/app-kit
+	github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats => ./../pkg/nats
+	github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts => ./../pkg/nats-contracts
 )
 
 require (
-	app-kit v0.0.0-00010101000000-000000000000
+github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit v0.0.0
+github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats v0.0.0
+github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts v0.0.0
 	go.uber.org/zap v1.27.0
-	nats v0.0.0-00010101000000-000000000000
-	nats-contracts v0.0.0-00010101000000-000000000000
 )
 
 require (

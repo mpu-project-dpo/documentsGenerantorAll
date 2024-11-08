@@ -1,9 +1,9 @@
 package deps
 
 import (
-	httpTransport "app-kit/http-transport"
+	httpTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/http-transport"
+	natsClient "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/producer"
 	"go.uber.org/zap"
-	natsClient "nats/producer"
 )
 
 type Providers struct {

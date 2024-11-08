@@ -9,5 +9,4 @@ type Config struct {
 
 type Client struct {
 	conn *nats.Conn
-	t    string
 }

@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"app-kit/server"
 	"dpo-document-api/config"
 	controller "dpo-document-api/internal/server"
 	"dpo-document-api/internal/server/deps"
+	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/server"
 )
 
 func Run() {

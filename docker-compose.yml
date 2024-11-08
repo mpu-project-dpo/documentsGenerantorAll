@@ -6,23 +6,16 @@ services:
     container_name: nats
     image: nats:latest
     restart: always
-    environment:
-      - S=S
-    healthcheck:
-      test: [ "CMD-SHELL", "telnet", "localhost", "4222" ]
-      interval: 10s
-      timeout: 3s
-      retries: 5
     ports:
       - 4222:4222 # client
-      - 8222:8222 # cluster
-      - 6222:6222 # monitoring
+      - 8222:8222 # monitoring
+      - 6222:6222 # routing
 
   postgres:
     container_name: postgres
     image: postgres:latest
     environment:
-      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_USER=postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
@@ -32,34 +25,33 @@ services:
       - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
       - pgdata:/var/lib/postgresql/data
+
   api:
     container_name: api
     environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
+      - POSTGRESQL_USER=postgres
     build:
-      context: ./api
+      context: .
+      dockerfile: api/Dockerfile
     ports:
-      - 8000:8000
+      - "8000:8000"
     depends_on:
       nats:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
+        condition: service_started
 
   processor:
     container_name: processor
     environment:
       - generator_HOST=processor
     build:
-      context: ./processor
+      context: .
+      dockerfile: processor/Dockerfile
     ports:
-      - 8001:8001
+      - "8001:8001"
     depends_on:
       nats:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-  
+        condition: service_started
+
   pgadm:
     container_name: pgadmin4_container
     image: dpage/pgadmin4:7
@@ -75,7 +67,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-
 
 volumes:
   pgadmin-data:

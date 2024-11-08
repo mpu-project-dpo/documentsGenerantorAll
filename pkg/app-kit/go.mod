@@ -1,4 +1,4 @@
-module app-kit
+module github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit
 
 go 1.23.1
 

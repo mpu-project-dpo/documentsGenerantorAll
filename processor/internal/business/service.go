@@ -1,7 +1,7 @@
 package business
 
 import (
-	natsContracts "nats-contracts"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 )
 
 type IDpoDocumentProcessingService interface {

@@ -7,19 +7,20 @@ ENV CGO_ENABLED=0 \
 
 RUN apk add --no-cache git
 
-WORKDIR /build
+WORKDIR /src
 
-COPY .. .
+COPY . .
+
+WORKDIR /src/api
 
 RUN go mod download
-
 RUN go build -o main .
 
 FROM alpine:3.20
 
-COPY --from=builder /build/main /
+COPY --from=builder /src/api/main /
 
-COPY config /config
+COPY api/config /config
 
 USER nobody
 

@@ -1,8 +1,8 @@
 package nats
 
 import (
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 	"go.uber.org/zap"
-	natsContracts "nats-contracts"
 )
 
 func (h *Handler) ProcessDocument(doc *natsContracts.Document) error {

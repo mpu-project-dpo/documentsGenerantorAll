@@ -1,11 +1,11 @@
 package server
 
 import (
-	httpTransport "app-kit/http-transport"
-	appKit "app-kit/server"
 	brokerApiService "dpo-document-api/internal/business/service"
 	brokerApiTransport "dpo-document-api/internal/business/transport/http"
 	"dpo-document-api/internal/server/deps"
+	httpTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/http-transport"
+	appKit "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/server"
 	"net/http"
 )
 

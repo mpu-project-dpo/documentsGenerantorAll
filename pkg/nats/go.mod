@@ -1,4 +1,4 @@
-module nats
+module github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats
 
 go 1.23.1
 

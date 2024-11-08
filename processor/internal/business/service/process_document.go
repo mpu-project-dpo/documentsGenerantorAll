@@ -2,13 +2,13 @@ package service
 
 import (
 	"github.com/lukasjarosch/go-docx"
-	natsContracts "nats-contracts"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 )
 
 func (s *Service) InsertDocumentDataIntoTemplate(document *natsContracts.Document) error {
 	rm := natsContracts.ConvertDocumentToPlaceholderMap(document)
 
-	doc, err := docx.Open("template.docx")
+	doc, err := docx.Open("./template/template.docx")
 	if err != nil {
 		return err
 	}

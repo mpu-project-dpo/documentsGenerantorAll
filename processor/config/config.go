@@ -1,8 +1,8 @@
 package config
 
 import (
-	"app-kit/logger"
-	natsTransport "nats/consumer"
+	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/logger"
+	natsTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/consumer"
 )
 
 type ServiceConfig struct {

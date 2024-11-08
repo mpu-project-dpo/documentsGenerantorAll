@@ -1,12 +1,12 @@
 package server
 
 import (
-	appKit "app-kit/server"
 	processorService "dpo-document-processor/internal/business/service"
 	processorTransport "dpo-document-processor/internal/business/transport/nats"
 	"dpo-document-processor/internal/server/deps"
-	natsContracts "nats-contracts"
-	natsTransport "nats/consumer"
+	appKit "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/server"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
+	natsTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/consumer"
 )
 
 func GetController(deps *deps.Providers) appKit.IController {

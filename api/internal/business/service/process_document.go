@@ -2,7 +2,7 @@ package service
 
 import (
 	"encoding/json"
-	natsContracts "nats-contracts"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 )
 
 func (s *Service) ProcessDocument(document *natsContracts.Document) error {

@@ -3,6 +3,6 @@ http:
   port: 8001
 logger:
   dev_mode: true
-nats:
-  url: https://testnatsurl.com
+natstransport:
+  url: localhost
   topic: documents

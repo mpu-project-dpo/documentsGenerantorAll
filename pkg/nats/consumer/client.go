@@ -11,22 +11,24 @@ func New[T any](config *Config, fn func(*T) error) func() error {
 		panic(err)
 	}
 
-	defer func(nc *nats.Conn) {
-		err = nc.Drain()
-		if err != nil {
-			panic(err)
-		}
-	}(nc)
-
 	_, err = nc.Subscribe(config.Topic, convertToSubFunc[T](fn))
 	if err != nil {
 		return nil
 	}
 
-	return Client{nc, config.Topic}.Run
+	return Client{nc}.Run
 }
 
-func (c *Client) Run() error {
+func (c Client) Run() error {
+	select {
+	//TODO Add graceful shutdown
+	}
+
+	err := c.conn.Drain()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
