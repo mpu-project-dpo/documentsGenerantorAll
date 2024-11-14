@@ -11,16 +11,16 @@ WORKDIR /src
 
 COPY . .
 
-WORKDIR /src/api
+WORKDIR /src/processor
 
 RUN go mod download
 RUN go build -o main .
 
 FROM alpine:3.20
 
-COPY --from=builder /src/api/main /
+COPY --from=builder /src/processor/main /
 
-COPY api/config /config
+COPY processor/config /config
 
 USER nobody
 

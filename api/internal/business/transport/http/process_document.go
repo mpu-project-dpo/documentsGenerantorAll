@@ -1,14 +1,14 @@
 package http
 
 import (
-	"dpo-document-api/internal/business/models"
 	"encoding/json"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 	"go.uber.org/zap"
 	"net/http"
 )
 
 func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
-	doc := new(models.Document)
+	doc := new(natsContracts.Document)
 
 	if err := json.NewDecoder(r.Body).Decode(doc); err != nil {
 		return

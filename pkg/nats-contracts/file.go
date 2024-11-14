@@ -1,4 +1,4 @@
-package models
+package nats_contracts
 
 import "time"
 

@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"dpo-document-api/config"
-	controller "dpo-document-api/internal/server"
-	"dpo-document-api/internal/server/deps"
+	"dpo-document-processor/config"
+	controller "dpo-document-processor/internal/server"
+	"dpo-document-processor/internal/server/deps"
 	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/server"
 )
 
