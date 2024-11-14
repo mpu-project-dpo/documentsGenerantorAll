@@ -1,19 +1,18 @@
-package natsClient
+package producer
 
-import "github.com/nats-io/nats.go"
+import (
+	"fmt"
+	"github.com/nats-io/nats.go"
+)
 
 func (c *Config) New() *Client {
 	nc, err := nats.Connect(c.URL)
 	if err != nil {
 		panic(err)
 	}
-
-	defer func(nc *nats.Conn) {
-		err = nc.Drain()
-		if err != nil {
-			panic(err)
-		}
-	}(nc)
+	if nc.Status() != nats.CONNECTED {
+		panic(fmt.Sprintf("Connection to Nats is aborted status %d", nc.Status()))
+	}
 
 	return &Client{nc, c.Topic}
 }

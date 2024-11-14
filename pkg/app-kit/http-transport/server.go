@@ -29,7 +29,7 @@ func New(config *Config, router http.Handler, withoutCORS bool) func() error {
 	g.Go(func() error {
 		<-gCtx.Done()
 		zap.L().Info("Graceful shutdown triggered")
-		// return http.Shutdown(context.Background())
+		// return nats.Shutdown(context.Background())
 		//TODO добавить грейсфул закрытие
 		return nil
 	})

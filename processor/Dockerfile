@@ -11,18 +11,19 @@ WORKDIR /src
 
 COPY . .
 
-WORKDIR /src/api
+WORKDIR /src/processor
 
 RUN go mod download
 RUN go build -o main .
 
 FROM alpine:3.20
 
-COPY --from=builder /src/api/main /
+COPY --from=builder /src/processor/main /
 
-COPY api/config /config
+COPY --from=builder /src/processor/config /config
+COPY --from=builder /src/processor/template /template
 
-USER nobody
+# USER nobody
 
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl -sS 127.0.0.1:8000 || exit 1
 

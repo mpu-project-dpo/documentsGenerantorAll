@@ -1,9 +1,9 @@
 package config
 
 import (
-	httpTransport "dpo-document-api/pkg/app-kit/http-transport"
-	"dpo-document-api/pkg/app-kit/logger"
-	natsClient "dpo-document-api/pkg/nats-client"
+	httpTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/http-transport"
+	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/logger"
+	natsClient "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/producer"
 )
 
 type ServiceConfig struct {

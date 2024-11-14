@@ -1,4 +1,4 @@
-package natsClient
+package consumer
 
 import "github.com/nats-io/nats.go"
 
@@ -9,5 +9,4 @@ type Config struct {
 
 type Client struct {
 	conn *nats.Conn
-	t    string
 }

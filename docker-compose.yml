@@ -1,60 +1,82 @@
 ---
-version: '3.0'
+version: '3.5'
 
 services:
+  nats:
+    container_name: nats
+    image: nats:2.10.16-alpine3.19
+    restart: always
+    command: -m 8222
+    ports:
+#      - 4222:4222 # client
+      - 8222:8222 # monitoring
+#      - 6222:6222 # routing
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.3 
+    healthcheck:
+      test: wget http://localhost:8222/healthz -q -S -O -
+      start_period: 3s
+      retries: 3
+      timeout: 3s
+      interval: 14s  
+
   postgres:
     container_name: postgres
     image: postgres:latest
+    restart: always
     environment:
-      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 3s
       retries: 5
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.4 
     volumes:
       - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
       - pgdata:/var/lib/postgresql/data
-  backend:
-    container_name: backend
+
+  api:
+    container_name: api
+    restart: always
     environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
+      - POSTGRESQL_USER=postgres
     build:
-      context: ./backend
+      context: .
+      dockerfile: api/Dockerfile
     ports:
-      - ${API_HOST_PORT}:${API_PORT}
+      - "8000:8000"
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.5
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-  logger:
-    container_name: logger
-    environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
-    build:
-      context: ./logger
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
+      nats:
         condition: service_healthy
 
-  generator:
+  processor:
     container_name: processor
+    restart: always
     environment:
       - generator_HOST=processor
     build:
-      context: ./aggregator-go
+      context: .
+      dockerfile: processor/Dockerfile
     ports:
-      - ${AGGREGATOR_HOST_PORT}:${AGGREGATOR_PORT}
+      - "8001:8001"
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.6
+    volumes:
+      - /Users/ivankorotkii/package:/template
     depends_on:
-      rabbitmq:
+      nats:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
-  
+
   pgadm:
     container_name: pgadmin4_container
     image: dpage/pgadmin4:7
@@ -71,7 +93,14 @@ services:
       postgres:
         condition: service_healthy
 
-
 volumes:
   pgadmin-data:
   pgdata:
+
+networks:
+  my-network:
+    driver: bridge
+    external: false
+    ipam:
+      config:
+        - subnet: 172.28.1.0/24  # Определяем подсеть

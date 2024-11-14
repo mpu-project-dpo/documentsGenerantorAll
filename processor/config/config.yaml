@@ -1,8 +1,8 @@
 ---
 http:
-  port: 8000
+  port: 8001
 logger:
   dev_mode: true
-nats:
+natstransport:
   url: nats://172.28.1.3:4222
   topic: documents
