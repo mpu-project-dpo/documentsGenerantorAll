@@ -1,7 +1,7 @@
 package server
 
 import (
-	"dpo-document-api/pkg/app-kit/server/config"
+	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/server/config"
 )
 
 func WithController[C any, D any](deps func(*C) *D, transport func(*D) IController) IController {
