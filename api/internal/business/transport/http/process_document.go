@@ -11,6 +11,7 @@ func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
 	doc := new(natsContracts.Document)
 
 	if err := json.NewDecoder(r.Body).Decode(doc); err != nil {
+		zap.L().Sugar().Errorf("decode error %s", err.Error())
 		return
 	}
 
@@ -19,6 +20,6 @@ func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
+	h.DpoDocumentService.ProcessDocument(doc)
 	w.WriteHeader(http.StatusOK)
 }

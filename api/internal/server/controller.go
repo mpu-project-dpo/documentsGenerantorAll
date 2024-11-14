@@ -22,6 +22,6 @@ func GetController(deps *deps.Providers) appKit.IController {
 	return httpTransport.New(
 		deps.ServerHTTP,
 		mux,
-		false,
+		true,
 	)
 }

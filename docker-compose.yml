@@ -1,4 +1,3 @@
----
 version: '3.5'
 
 services:
@@ -8,12 +7,11 @@ services:
     restart: always
     command: -m 8222
     ports:
-#      - 4222:4222 # client
-      - 8222:8222 # monitoring
-#      - 6222:6222 # routing
+      - 4222 # client
+      - 8222 # monitoring
+      - 6222 # routing
     networks:
-      my-network:
-        ipv4_address: 172.28.1.3 
+      - my-network
     healthcheck:
       test: wget http://localhost:8222/healthz -q -S -O -
       start_period: 3s
@@ -34,12 +32,30 @@ services:
       timeout: 3s
       retries: 5
     networks:
-      my-network:
-        ipv4_address: 172.28.1.4 
+      - my-network
     volumes:
       - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
       - pgdata:/var/lib/postgresql/data
+
+  ui:
+    container_name: ui
+    restart: always
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    networks:
+      - default
+      - my-network
+    environment:
+      - VITE_API_BASE_URL=localhost # - uri на котором лежит сайт
+      - VITE_SEND_FORM_PATH=api:8000 # - REST API uri бека
+      - VITE_GET_DPO_PATH=api:8000  # - REST API откуда берем файл
+      - VITE_CONF_POLICY_LINK=string # - ссылка на политику конфиденциальности
+    depends_on:
+      api:
+        condition: service_healthy
+
 
   api:
     container_name: api
@@ -72,7 +88,7 @@ services:
       my-network:
         ipv4_address: 172.28.1.6
     volumes:
-      - /Users/ivankorotkii/package:/template
+      - /Users/ivankorotkii/package:/ans
     depends_on:
       nats:
         condition: service_healthy
