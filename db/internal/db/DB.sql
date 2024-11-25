@@ -1,28 +1,35 @@
--- 1. Создание базы данных
-CREATE DATABASE mydb;
 
--- 2. Подключение к базе данных
-\c mydb;
+CREATE DATABASE student_db;
 
--- 3. Создание таблицы students
-CREATE TABLE students (
-    id SERIAL PRIMARY KEY,              -- Уникальный идентификатор студента
-    full_name TEXT NOT NULL,    -- Полное имя
-    university TEXT,            -- Университет
-    education_form TEXT,         -- Форма обучения
-    course INT,                         -- Курс
-    "group" TEXT,                -- Группа
-    specialty TEXT,             -- Специальность
-    profile TEXT,               -- Профиль
-    snils TEXT,                  -- Номер СНИЛС
-    passport_series TEXT,        -- Серия и номер паспорта
-    passport_issue_date DATE,           -- Дата выдачи паспорта
-    birth_date DATE,                    -- Дата рождения
-    email TEXT,                 -- Электронная почта
-    phone_number TEXT,           -- Номер телефона
-    telegram_username TEXT      -- Имя пользователя в Telegram
+\c student_db;
+
+CREATE TABLE Universities (
+    UniversityID SERIAL PRIMARY KEY,
+    UniversityName VARCHAR(255),
+    EducationForm VARCHAR(255),
+    Course INT,
+    GroupName VARCHAR(255),
+    Specialty VARCHAR(255),
+    Profile VARCHAR(255)
 );
 
--- 4. (Опционально) Проверка созданной таблицы
--- Получаем структуру таблицы для проверки
-\d students;
+CREATE TABLE Passports (
+    PassportID SERIAL PRIMARY KEY,
+    PassportSeries VARCHAR(255),
+    PassportIssueDate DATE
+);
+
+
+CREATE TABLE Students (
+    StudentID SERIAL PRIMARY KEY,
+    FullName VARCHAR(255),
+    SNILS VARCHAR(255),
+    BirthDate DATE,
+    Email VARCHAR(255),
+    PhoneNumber VARCHAR(255),
+    TelegramUsername VARCHAR(255),
+    UniversityID INT,
+    PassportID INT,
+    FOREIGN KEY (UniversityID) REFERENCES Universities(UniversityID),
+    FOREIGN KEY (PassportID) REFERENCES Passports(PassportID)
+);
