@@ -39,7 +39,7 @@
       >
       <div class="ml-1"><slot name="append" /></div>
       <div v-if="props.clearable && modelValue" class="w-6 h-6 ml-1">
-        <Button v-if="modelValue" class="bg-surface-dark rounded" @click.prevent="modelValue = ''">
+        <Button v-if="modelValue" class="bg-surface-dark rounded">
           <Close class="m-0.5" />
         </Button>
       </div>
