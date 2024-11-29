@@ -1,5 +1,5 @@
 <template>
-  <form class="flex flex-col gap-3" @submit.prevent>
+  <form class="flex flex-col gap-3">
     <Input
       v-for="key in Object.keys(docs)"
       :key="key"

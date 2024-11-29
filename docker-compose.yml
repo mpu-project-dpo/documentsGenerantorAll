@@ -1,97 +1,114 @@
----
-version: '3.5'
+version: '3.0'
 
 services:
-  nats:
-    container_name: nats
-    image: nats:2.10.16-alpine3.19
-    restart: always
-    command: -m 8222
-    ports:
-#      - 4222:4222 # client
-      - 8222:8222 # monitoring
-#      - 6222:6222 # routing
-    networks:
-      my-network:
-        ipv4_address: 172.28.1.3 
-    healthcheck:
-      test: wget http://localhost:8222/healthz -q -S -O -
-      start_period: 3s
-      retries: 3
-      timeout: 3s
-      interval: 14s  
+#  nats:
+#    container_name: nats
+#    image: nats:2.10.16-alpine3.19
+#    restart: always
+#    command: -m 8222
+#    ports:
+#      - 4222 # client
+#      - 8222 # monitoring
+#      - 6222 # routing
+#    networks:
+#      - my-network
+#    healthcheck:
+#      test: wget http://localhost:8222/healthz -q -S -O -
+#      start_period: 3s
+#      retries: 3
+#      timeout: 3s
+#      interval: 14s
+#
+#  postgres:
+#    container_name: postgres
+#    image: postgres:latest
+#    restart: always
+#    environment:
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready" ]
+#      interval: 10s
+#      timeout: 3s
+#      retries: 5
+#    networks:
+#      - my-network
+#    volumes:
+#      - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+#      - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
+#      - pgdata:/var/lib/postgresql/data
 
-  postgres:
-    container_name: postgres
-    image: postgres:latest
+  ui:
+    container_name: ui
     restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-    networks:
-      my-network:
-        ipv4_address: 172.28.1.4 
-    volumes:
-      - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
-      - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
-      - pgdata:/var/lib/postgresql/data
-
-  api:
-    container_name: api
-    restart: always
-    environment:
-      - POSTGRESQL_USER=postgres
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: ./ui
+      dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - 80:80
     networks:
-      my-network:
-        ipv4_address: 172.28.1.5
-    depends_on:
-      nats:
-        condition: service_healthy
-
-  processor:
-    container_name: processor
-    restart: always
+      - default
+      - my-network
     environment:
-      - generator_HOST=processor
-    build:
-      context: .
-      dockerfile: processor/Dockerfile
-    ports:
-      - "8001:8001"
-    networks:
-      my-network:
-        ipv4_address: 172.28.1.6
-    volumes:
-      - /Users/ivankorotkii/package:/template
-    depends_on:
-      nats:
-        condition: service_healthy
+      - VITE_API_BASE_URL=localhost # - uri на котором лежит сайт
+      - VITE_SEND_FORM_PATH=http://localhost:8000 # - REST API uri бека
+      - VITE_GET_DPO_PATH=http://localhost:8000  # - REST API откуда берем файл
+      - VITE_CONF_POLICY_LINK=string # - ссылка на политику конфиденциальности
 
-  pgadm:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4:7
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - "5050:5050"
-      - "1027:80"
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    depends_on:
-      postgres:
-        condition: service_healthy
+
+
+#  api:
+#    container_name: api
+#    hostname: api
+#    restart: always
+#    environment:
+#      - POSTGRESQL_USER=postgres
+#    build:
+#      context: .
+#      dockerfile: api/Dockerfile
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      my-network:
+#        ipv4_address: 172.28.1.5
+#    depends_on:
+#      nats:
+#        condition: service_healthy
+#
+#  processor:
+#    container_name: processor
+#    restart: always
+#    environment:
+#      - generator_HOST=processor
+#    build:
+#      context: .
+#      dockerfile: processor/Dockerfile
+#    ports:
+#      - "8001:8001"
+#    networks:
+#      my-network:
+#        ipv4_address: 172.28.1.6
+#    volumes:
+#      - /Users/ivankorotkii/package:/ans
+#    depends_on:
+#      nats:
+#        condition: service_healthy
+#
+#  pgadm:
+#    container_name: pgadmin4_container
+#    image: dpage/pgadmin4:7
+#    restart: always
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: root
+#    ports:
+#      - "5050:5050"
+#      - "1027:80"
+#    volumes:
+#      - pgadmin-data:/var/lib/pgadmin
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
 
 volumes:
   pgadmin-data:
