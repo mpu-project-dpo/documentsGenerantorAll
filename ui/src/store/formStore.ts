@@ -40,7 +40,7 @@ export const useFormStore = defineStore('form', () => {
     const rawJson = { ...education, ...contacts, ...docs }
     const jsonToSend = Object.entries(rawJson).reduce((acc, [key, item]) => ({ ...acc, [key]: item.value }), {})
     try {
-      await apiStore.api.post(import.meta.env.VITE_SEND_FORM_PATH, { ...jsonToSend, confPolicy: confPolicy.value })
+      await apiStore.api.post("http://localhost:8000/api/v1/document/process", { ...jsonToSend, confPolicy: confPolicy.value })
     }
     catch (e) {
       console.error(e)

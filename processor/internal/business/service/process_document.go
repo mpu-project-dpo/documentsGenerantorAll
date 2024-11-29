@@ -18,7 +18,7 @@ func (s *Service) InsertDocumentDataIntoTemplate(document *natsContracts.Documen
 		return err
 	}
 
-	err = doc.WriteToFile("replaced.docx")
+	err = doc.WriteToFile("./ans/replaced.docx")
 	if err != nil {
 		return err
 	}
