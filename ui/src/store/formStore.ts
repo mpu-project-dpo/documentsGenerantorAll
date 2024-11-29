@@ -22,6 +22,8 @@ export const useFormStore = defineStore('form', () => {
   })
 
   const docs = reactive({
+    regAddress: { field: 'Адрес по месту регистрации', value: '' },
+    currentAddress: { field: 'Адрес по месту жительства', value: '' },
     passport: { field: 'Серия и номер паспорта', value: '', mask: 'XXXX ########' },
     dateOfIssue: { field: 'Дата выдачи', value: '', mask: '##.##.####' },
     issuedBy: { field: 'Кем выдан', value: '' },
