@@ -4,8 +4,6 @@ import (
 	"dpo-document-api/internal/model"
 	"encoding/json"
 	"net/http"
-	"time"
-
 	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 	"go.uber.org/zap"
 )
@@ -18,8 +16,8 @@ func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	doc := new(natsContracts.Document)
-	doc.FIO = doc1.Name + " " + doc1.Surename
-	doc.Birthdate, _ = time.Parse("2/1/2006", doc1.Birthdate) 
+	doc.FIO = doc1.Patronymic + " "+ doc1.Name + " " + doc1.Surename
+	doc.Birthdate = doc1.Birthdate 
 	doc.Course = doc1.Course
 	doc.Group = doc1.Group
 	doc.Phone = doc1.Phone
@@ -28,7 +26,10 @@ func (h *Handler) ProcessDocument(w http.ResponseWriter, r *http.Request) {
 	doc.Email = doc1.Email
 	doc.SnilsId = doc1.SnilsId
 	doc.Specialty = doc1.Specialty
-	doc.PassportIssueDate, _ = time.Parse("2/1/2006", doc1.PassportIssueDate)
+	doc.PassportIssueDate =  doc1.PassportIssueDate
+	doc.PassportId = doc1.PassportId
+	doc.CurrentAdress = doc1.CurrentAdress
+	doc.RegAddress = doc1.RegAddress
 	if err := h.DpoDocumentService.ProcessDocument(doc); err != nil {
 		zap.L().Sugar().Errorf("Internal error %s", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)

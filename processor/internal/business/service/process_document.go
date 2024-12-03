@@ -8,17 +8,22 @@ import (
 func (s *Service) InsertDocumentDataIntoTemplate(document *natsContracts.Document) error {
 	rm := natsContracts.ConvertDocumentToPlaceholderMap(document)
 
-	doc, err := docx.Open("./template/template.docx")
+	doc, err := docx.Open("./template/tmp1.docx")
+	doc2, err := docx.Open("./template/tmp2.docx")
 	if err != nil {
 		return err
 	}
 
-	err = doc.ReplaceAll(rm)
+	doc.ReplaceAll(rm)
+	doc2.ReplaceAll(rm)
+
 	if err != nil {
 		return err
 	}
 
 	err = doc.WriteToFile("./ans/replaced.docx")
+	doc2.WriteToFile("./ans/replaced2.docx")
+
 	if err != nil {
 		return err
 	}
