@@ -14,6 +14,6 @@ func ConvertDocumentToPlaceholderMap(d *Document) map[string]interface{} {
 	}
 	v := time.Now()
 	r["nowDate"] = v.Format("2006/01/02")
-	
-	return r
+
+  return r
 }
