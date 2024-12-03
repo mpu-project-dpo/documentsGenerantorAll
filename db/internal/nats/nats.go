@@ -1,19 +1,18 @@
 package nats
 
 import (
-	"ape/internal/models"
 	"encoding/json"
 	"log"
 
-	"github.com/spf13/viper"
-
+	"github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 	"github.com/nats-io/nats.go"
+	"github.com/spf13/viper"
 )
 
 const natsSubject = "students_data"
 
 // ListenAndProcessMessages слушает сообщения из NATS и отправляет их в канал
-func ListenAndProcessMessages(c chan<- models.Student) error {
+func ListenAndProcessMessages(c chan<- nats_contracts.Document) error {
 	// Читаем URL из конфигурации
 	natsURL := viper.GetString("nats.url")
 
@@ -36,14 +35,13 @@ func ListenAndProcessMessages(c chan<- models.Student) error {
 
 	// Обрабатываем сообщения из канала
 	for msg := range msgChan {
-		var student models.Student
-		if err := json.Unmarshal(msg.Data, &student); err != nil {
+		var document nats_contracts.Document
+		if err := json.Unmarshal(msg.Data, &document); err != nil {
 			log.Printf("Error unmarshaling message: %v", err)
 			continue
 		}
 
-		// Отправляем данные в канал
-		c <- student
+		c <- document
 	}
 
 	return nil

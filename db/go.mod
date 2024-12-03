@@ -2,14 +2,18 @@ module ape
 
 go 1.23.1
 
-
 require (
 	dpo-document-api v0.0.0
 	github.com/jackc/pgx/v5 v5.7.1
+	github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts v0.0.0
 	github.com/nats-io/nats.go v1.37.0
 	github.com/spf13/viper v1.19.0
 )
+
 replace dpo-document-api => ../api
+
+replace github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts => ./../pkg/nats-contracts
+
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -32,7 +36,7 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/crypto v0.27.0 // indirect
 	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
-	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

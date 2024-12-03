@@ -1,20 +1,21 @@
 package db
 
 import (
-	"ape/internal/models"
 	"context"
 	"log"
 	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+	nats_contracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 	"github.com/spf13/viper"
 )
 
 // ProcessAndSaveStudents обрабатывает студентов из канала и сохраняет их в базе данных
-func (db DBConnection) ProcessAndSaveStudents(c <-chan models.Student) {
-	for student := range c {
-		if err := db.SaveStudent(student); err != nil {
-			log.Printf("Error saving student: %v", err)
+func (db DBConnection) ProcessAndSaveStudents(c <-chan nats_contracts.Document) {
+	for document := range c {
+		if err := db.SaveDocument(document); err != nil {
+			log.Printf("Error saving document: %v", err)
 		}
 	}
 }
@@ -50,43 +51,54 @@ func (db DBConnection) Close() {
 }
 
 // SaveUniversity сохраняет данные университета в базу данных
-func (db DBConnection) SaveUniversity(university models.University) (int, error) {
+func (db DBConnection) SaveUniversity(tx pgx.Tx, university string, studyForm string, course string, group string, specialty string, profile string) (int, error) {
 	var universityID int
-	err := db.Pool.QueryRow(context.Background(),
+	err := tx.QueryRow(context.Background(),
 		"INSERT INTO universities (university_name, education_form, course, group_name, specialty, profile) VALUES ($1, $2, $3, $4, $5, $6) RETURNING university_id",
-		university.UniversityName, university.EducationForm, university.Course, university.GroupName, university.Specialty, university.Profile,
+		university, studyForm, course, group, specialty, profile,
 	).Scan(&universityID)
 	return universityID, err
 }
 
 // SavePassport сохраняет данные паспорта в базу данных
-func (db DBConnection) SavePassport(passport models.Passport) (int, error) {
+func (db DBConnection) SavePassport(tx pgx.Tx, passportId string, passportIssueDate time.Time) (int, error) {
 	var passportID int
-	err := db.Pool.QueryRow(context.Background(),
+	err := tx.QueryRow(context.Background(),
 		"INSERT INTO passports (passport_series, passport_issue_date) VALUES ($1, $2) RETURNING passport_id",
-		passport.PassportSeries, passport.PassportIssueDate,
+		passportId, passportIssueDate,
 	).Scan(&passportID)
 	return passportID, err
 }
 
-// SaveStudent сохраняет данные студента в базу данных
-func (db DBConnection) SaveStudent(student models.Student) error {
+// SaveDocument сохраняет данные документа в базу данных
+func (db DBConnection) SaveDocument(document nats_contracts.Document) error {
+	tx, err := db.Pool.Begin(context.Background())
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(context.Background())
+
 	// Сохраняем данные университета
-	universityID, err := db.SaveUniversity(student.University)
+	universityID, err := db.SaveUniversity(tx, document.University, document.StudyForm, document.Course, document.Group, document.Specialty, document.Profile)
 	if err != nil {
 		return err
 	}
 
 	// Сохраняем данные паспорта
-	passportID, err := db.SavePassport(student.Passport)
+	passportID, err := db.SavePassport(tx, document.PassportId, document.PassportIssueDate)
 	if err != nil {
 		return err
 	}
 
 	// Сохраняем данные студента
-	_, err = db.Pool.Exec(context.Background(),
+	_, err = tx.Exec(context.Background(),
 		"INSERT INTO students (full_name, snils, birth_date, email, phone_number, telegram_username, university_id, passport_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-		student.FullName, student.SNILS, student.BirthDate, student.Email, student.PhoneNumber, student.TelegramUsername, universityID, passportID,
+		document.FIO, document.SnilsId, document.Birthdate, document.Email, document.Phone, document.TelegramId, universityID, passportID,
 	)
-	return err
+	if err != nil {
+		return err
+	}
+
+	// Фиксируем транзакцию
+	return tx.Commit(context.Background())
 }
