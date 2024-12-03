@@ -17,12 +17,16 @@ RUN go mod download
 RUN go build -o main .
 
 FROM alpine:3.20
+RUN apk add curl
 
 COPY --from=builder /src/api/main /
 
 COPY api/config /config
 
 USER nobody
+
+EXPOSE 8000
+
 
 HEALTHCHECK --interval=5s --timeout=10s --retries=3 CMD curl -sS 127.0.0.1:8000 || exit 1
 

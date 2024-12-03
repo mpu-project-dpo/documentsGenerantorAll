@@ -1,8 +1,7 @@
----
 http:
   port: 8000
 logger:
   dev_mode: true
 nats:
-  url: nats://localhost:4222
+  url: nats://nats:4222
   topic: documents

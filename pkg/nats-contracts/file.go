@@ -1,6 +1,5 @@
 package nats_contracts
 
-import "time"
 
 type Document struct {
 	FIO               string    `json:"fio,omitempty"`
@@ -12,9 +11,11 @@ type Document struct {
 	Profile           string    `json:"profile,omitempty"`
 	SnilsId           string    `json:"snils_id,omitempty"`
 	PassportId        string    `json:"passport_id,omitempty"`
-	PassportIssueDate time.Time `json:"passport_issue_date,omitempty"`
-	Birthdate         time.Time `json:"birthdate,omitempty"`
+	PassportIssueDate string `json:"passport_issue_date,omitempty"`
+	Birthdate         string `json:"birthdate,omitempty"`
 	Email             string    `json:"email,omitempty"`
 	Phone             string    `json:"phone,omitempty"`
-	TelegramId        string    `json:"telegram_id"`
+	TelegramId        string    `json:"telegram_id,omitempty"`
+	CurrentAdress string `json:"currentAddress,omitempty"`
+	RegAddress string `json:"regAddress,omitempty"`
 }
