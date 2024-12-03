@@ -61,7 +61,7 @@ func (db DBConnection) SaveUniversity(tx pgx.Tx, university string, studyForm st
 }
 
 // SavePassport сохраняет данные паспорта в базу данных
-func (db DBConnection) SavePassport(tx pgx.Tx, passportId string, passportIssueDate time.Time) (int, error) {
+func (db DBConnection) SavePassport(tx pgx.Tx, passportId string, passportIssueDate string) (int, error) {
 	var passportID int
 	err := tx.QueryRow(context.Background(),
 		"INSERT INTO passports (passport_series, passport_issue_date) VALUES ($1, $2) RETURNING passport_id",

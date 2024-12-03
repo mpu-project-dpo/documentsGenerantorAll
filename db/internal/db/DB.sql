@@ -16,7 +16,7 @@ CREATE TABLE Universities (
 CREATE TABLE Passports (
     PassportID SERIAL PRIMARY KEY,
     PassportSeries VARCHAR(255),
-    PassportIssueDate DATE
+    PassportIssueDate VARCHAR(255)
 );
 
 
@@ -24,7 +24,7 @@ CREATE TABLE Students (
     StudentID SERIAL PRIMARY KEY,
     FullName VARCHAR(255),
     SNILS VARCHAR(255),
-    BirthDate DATE,
+    BirthDate VARCHAR(255),
     Email VARCHAR(255),
     PhoneNumber VARCHAR(255),
     TelegramUsername VARCHAR(255),
