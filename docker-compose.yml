@@ -1,60 +1,101 @@
----
 version: '3.0'
 
 services:
+  nats:
+    container_name: nats
+    image: nats:2.10.16-alpine3.19
+    restart: always
+    command: -m 8222
+    ports:
+      - 4222 # client
+      - 8222 # monitoring
+      - 6222 # routing
+    networks:
+      - my-network
+    healthcheck:
+      test: wget http://localhost:8222/healthz -q -S -O -
+      start_period: 3s
+      retries: 3
+      timeout: 3s
+      interval: 14s  
+
   postgres:
     container_name: postgres
     image: postgres:latest
+    restart: always
     environment:
-      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 10s
       timeout: 3s
       retries: 5
+    networks:
+      - my-network
     volumes:
       - ./db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ./db/postgresql.conf:/usr/share/postgresql/postgresql.conf
       - pgdata:/var/lib/postgresql/data
-  backend:
-    container_name: backend
-    environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
+
+  ui:
+    container_name: ui
+    restart: always
     build:
-      context: ./backend
+      context: ./ui
+      dockerfile: Dockerfile
     ports:
-      - ${API_HOST_PORT}:${API_PORT}
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-  logger:
-    container_name: logger
+      - 80:80
+    networks:
+      - default
+      - my-network
     environment:
-      - POSTGRESQL_USER=${POSTGRESQL_USER}
-    build:
-      context: ./logger
+      - VITE_API_BASE_URL=localhost # - uri на котором лежит сайт
+      - VITE_SEND_FORM_PATH=http://localhost:8000 # - REST API uri бека
+      - VITE_GET_DPO_PATH=http://localhost:8000  # - REST API откуда берем файл
+      - VITE_CONF_POLICY_LINK=string # - ссылка на политику конфиденциальности
     depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgres:
+      api:
         condition: service_healthy
 
-  generator:
+
+  api:
+    container_name: api
+    hostname: api
+    restart: always
+    environment:
+      - POSTGRESQL_USER=postgres
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    ports:
+      - "8000:8000"
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.5
+    depends_on:
+      nats:
+        condition: service_healthy
+
+  processor:
     container_name: processor
+    restart: always
     environment:
       - generator_HOST=processor
     build:
-      context: ./aggregator-go
+      context: .
+      dockerfile: processor/Dockerfile
     ports:
-      - ${AGGREGATOR_HOST_PORT}:${AGGREGATOR_PORT}
+      - "8001:8001"
+    networks:
+      my-network:
+        ipv4_address: 172.28.1.6
+    volumes:
+      - /Users/ivankorotkii/package:/ans
     depends_on:
-      rabbitmq:
+      nats:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
-  
+
   pgadm:
     container_name: pgadmin4_container
     image: dpage/pgadmin4:7
@@ -71,7 +112,14 @@ services:
       postgres:
         condition: service_healthy
 
-
 volumes:
   pgadmin-data:
   pgdata:
+
+networks:
+  my-network:
+    driver: bridge
+    external: false
+    ipam:
+      config:
+        - subnet: 172.28.1.0/24  # Определяем подсеть

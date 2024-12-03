@@ -1,11 +1,11 @@
 package service
 
 import (
-	"dpo-document-api/internal/business/models"
 	"encoding/json"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 )
 
-func (s *Service) ProcessDocument(document *models.Document) error {
+func (s *Service) ProcessDocument(document *natsContracts.Document) error {
 	bytes, err := json.Marshal(document)
 	if err != nil {
 		return err

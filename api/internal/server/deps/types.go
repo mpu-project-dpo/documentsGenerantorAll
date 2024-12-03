@@ -1,8 +1,8 @@
 package deps
 
 import (
-	httpTransport "dpo-document-api/pkg/app-kit/http-transport"
-	natsClient "dpo-document-api/pkg/nats-client"
+	httpTransport "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/app-kit/http-transport"
+	natsClient "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats/producer"
 	"go.uber.org/zap"
 )
 

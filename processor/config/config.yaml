@@ -1,0 +1,7 @@
+http:
+  port: 8001
+logger:
+  dev_mode: true
+natstransport:
+  url: nats://nats:4222
+  topic: documents

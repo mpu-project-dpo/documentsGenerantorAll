@@ -1,9 +1,9 @@
 package business
 
 import (
-	"dpo-document-api/internal/business/models"
+	natsContracts "github.com/mpu-project-dpo/documentsGenerantorAll/pkg/nats-contracts"
 )
 
 type IDpoDocumentService interface {
-	ProcessDocument(document *models.Document) error
+	ProcessDocument(document *natsContracts.Document) error
 }
